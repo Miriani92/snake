@@ -1,0 +1,7 @@
+TODOS 
+
+// snake will start on the postion of the zero
+[ we got the list array we do data id and then get attribbure of the dada id on 0 and change the style
+ ]
+
+ so we got the node haw chnge the style of this exact node 
