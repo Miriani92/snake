@@ -9,9 +9,24 @@ body {
 }
 
 .board {
+  position: relative;
   margin: 0 auto;
   margin-top: 100px;
   width: 800px;
   height: 800px;
+  display: grid;
+  grid-template-columns: repeat(20, 1fr);
   background-color: rgb(42, 54, 59);
+}
+.cell {
+  height: 40px;
+  outline: 1px solid red;
+}
+
+.cell-snake {
+  background-color: green;
+}
+
+.cell-food {
+  background-color: yellow;
 }
