@@ -5,3 +5,12 @@ export const randomFood = (boardlength) => {
   }
   return foodCellIndex;
 };
+
+export const foodGrowth = (foodCell, snakeCeels) => {
+  const head = snakeCeels[0];
+
+  if (foodCell === head) {
+    return head;
+  }
+  console.log(foodCell);
+};

@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { getClassName } from "../helpers/getClassName";
 import { createBoard } from "../helpers/createBoard";
-import { randomFood } from "../helpers/randomFood";
+import { randomFood, foodGrowth } from "../helpers/randomFood";
 import { useInterval } from "../helpers/interval";
 import { moveSnake } from "../helpers/moveSnake";
 import { getTheKey } from "../helpers/getSnakeDirection";
+
 // import { getSnakeDirection } from "../helpers/getSnakeDirection";
 
 const BoardSize = 20;
@@ -31,9 +32,9 @@ const Board = () => {
   }, [direction]);
 
   useInterval(() => {
-    const updatePosition = moveSnake(snakeCell[0], BoardSize, direction);
+    const updatePosition = moveSnake(snakeCell, BoardSize, direction);
     setSnakeCell(updatePosition);
-  }, 150);
+  }, 500);
 
   const gameOver = () => {
     let add = 0;
@@ -44,7 +45,6 @@ const Board = () => {
     const leftEdgeIndexes = new Array(20)
       .fill()
       .map((_, ind) => (add += BoardSize));
-    console.log(leftEdgeIndexes);
 
     if (
       (rightEdgeIndexes.includes(snakeCell[0]) &&
@@ -54,13 +54,29 @@ const Board = () => {
       snakeCell[0] < 0 ||
       snakeCell > board.length
     ) {
-      console.log("render");
       setSnakeCell(snkaeDefaultValue);
       setFoodCell(randomFood(board.length));
       setDirection(Direction.right);
     }
   };
+
+  const handleFoodCosumption = (foodCell, snakeCell) => {
+    const foodcell = foodGrowth(foodCell, snakeCell);
+    // const updateSnakeCell = [...snakeCell];
+    // updateSnakeCell.unshift(foodcell);
+
+    if (foodcell) {
+      setSnakeCell((prev) => {
+        const oldSnake = [...prev];
+        oldSnake.unshift(foodcell);
+        return oldSnake;
+      });
+    }
+  };
+  handleFoodCosumption(foodCell, snakeCell);
   gameOver();
+  console.log(snakeCell);
+
   return (
     <div className="board">
       {board.map((_, index) => {

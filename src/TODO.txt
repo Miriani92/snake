@@ -1,5 +1,1 @@
-// logic to hit the wall 
-    !! where--- in the move snake mecause we got the board 
-    !! if we got negative num||or more than lendgth we reset
-    //we need whrete and left edges and rigght
-   !! if the direaction is unchanged and the position is the edge than we reset       
+//TODO handleFoodCosumption we got bug  in this function when collision is heppening
