@@ -3,6 +3,8 @@ import { getClassName } from "../helpers/getClassName";
 import { createBoard } from "../helpers/createBoard";
 import { randomFood } from "../helpers/randomFood";
 import { useInterval } from "../helpers/interval";
+import { moveSnake } from "../helpers/moveSnake";
+import { getTheKey } from "../helpers/getSnakeDirection";
 // import { getSnakeDirection } from "../helpers/getSnakeDirection";
 
 const BoardSize = 20;
@@ -12,18 +14,53 @@ const Direction = {
   up: "up",
   down: "down",
 };
+const snkaeDefaultValue = [0];
 
 const Board = () => {
   const [board, setBoard] = useState(createBoard(BoardSize));
-  const [snakeCell, setSnakeCell] = useState([0, 1, 2]);
+  const [snakeCell, setSnakeCell] = useState(snkaeDefaultValue);
   const [foodCell, setFoodCell] = useState(randomFood(board.length));
-  const [direction, setDirection] = useState(direction.right);
+  const [direction, setDirection] = useState(Direction.right);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    window.addEventListener("keydown", (e) => {
+      const updatedDirection = getTheKey(e.key);
+      const isValidateDirection = updatedDirection;
+      if (isValidateDirection) setDirection(updatedDirection);
+    });
+  }, [direction]);
 
   useInterval(() => {
-    moveSnake(direction);
-  }, 500);
+    const updatePosition = moveSnake(snakeCell[0], BoardSize, direction);
+    setSnakeCell(updatePosition);
+  }, 150);
+
+  const gameOver = () => {
+    let add = 0;
+    const rightEdgeIndexes = new Array(20)
+      .fill()
+      .map((_, ind) => (add += BoardSize));
+    add = -1;
+    const leftEdgeIndexes = new Array(20)
+      .fill()
+      .map((_, ind) => (add += BoardSize));
+    console.log(leftEdgeIndexes);
+
+    if (
+      (rightEdgeIndexes.includes(snakeCell[0]) &&
+        direction === Direction.right) ||
+      (leftEdgeIndexes.includes(snakeCell[0]) &&
+        direction === Direction.left) ||
+      snakeCell[0] < 0 ||
+      snakeCell > board.length
+    ) {
+      console.log("render");
+      setSnakeCell(snkaeDefaultValue);
+      setFoodCell(randomFood(board.length));
+      setDirection(Direction.right);
+    }
+  };
+  gameOver();
   return (
     <div className="board">
       {board.map((_, index) => {
