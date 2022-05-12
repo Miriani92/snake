@@ -1,1 +1,1 @@
-//TODO handleFoodCosumption we got bug  in this function when collision is heppening
+// need the logic for edges 

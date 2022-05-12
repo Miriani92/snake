@@ -12,5 +12,4 @@ export const foodGrowth = (foodCell, snakeCeels) => {
   if (foodCell === head) {
     return head;
   }
-  console.log(foodCell);
 };
