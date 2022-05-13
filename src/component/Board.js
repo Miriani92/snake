@@ -5,6 +5,7 @@ import { randomFood, foodGrowth } from "../helpers/randomFood";
 import { useInterval } from "../helpers/interval";
 import { moveSnake } from "../helpers/moveSnake";
 import { getTheKey } from "../helpers/getSnakeDirection";
+import { validateDirection } from "../helpers/validateDireaction";
 
 const BoardSize = 20;
 const Direction = {
@@ -21,10 +22,18 @@ const Board = () => {
   const [foodCell, setFoodCell] = useState(randomFood(board.length));
   const [direction, setDirection] = useState(Direction.right);
 
+  const restart = () => {
+    setSnakeCell(snkaeDefaultValue);
+    setFoodCell(randomFood(board.length));
+    setDirection(Direction.right);
+  };
+
   useEffect(() => {
     window.addEventListener("keydown", (e) => {
       const updatedDirection = getTheKey(e.key);
       const isValidateDirection = updatedDirection;
+      const isinvalidDireacion = validateDirection(direction, updatedDirection);
+      if (isinvalidDireacion) return restart();
       if (isValidateDirection) setDirection(updatedDirection);
     });
   }, [direction]);
@@ -32,7 +41,7 @@ const Board = () => {
   useInterval(() => {
     const updatePosition = moveSnake(snakeCell, BoardSize, direction);
     setSnakeCell(updatePosition);
-  }, 500);
+  }, 200);
 
   const gameOver = () => {
     let add = 0;
@@ -43,13 +52,12 @@ const Board = () => {
     const leftEdgeIndexes = new Array(20)
       .fill()
       .map((_, ind) => (add += BoardSize));
-    console.log(console.log(rightEdgeIndexes));
 
     if (
       (rightEdgeIndexes.includes(snakeCell[0]) &&
         direction === Direction.right) ||
-      (leftEdgeIndexes.includes(snakeCell[0] - 1) &&
-        direction === Direction.left) ||
+      (leftEdgeIndexes.includes(snakeCell[0]) &&
+        direction === Direction.right) ||
       snakeCell[0] < 0 ||
       snakeCell > board.length
     ) {
