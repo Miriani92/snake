@@ -14,13 +14,16 @@ body {
   margin-top: 100px;
   width: 800px;
   height: 800px;
+}
+.row {
   display: grid;
   grid-template-columns: repeat(20, 1fr);
   background-color: rgb(42, 54, 59);
 }
+
 .cell {
-  height: 40px;
   outline: 1px solid red;
+  height: 40px;
 }
 
 .cell-snake {

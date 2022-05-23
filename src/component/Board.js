@@ -21,27 +21,22 @@ const Board = () => {
   const [snakeCell, setSnakeCell] = useState(snkaeDefaultValue);
   const [foodCell, setFoodCell] = useState(randomFood(BoardSize));
 
-  useInterval(() => {
-    const snakeMoveIndex = moveSnake(direction, BoardSize, snakeCell);
-    setSnakeCell([snakeMoveIndex]);
-  }, 1000);
-  // const getFood = (foodCell, snakcell) => {
-  //   if (foodCell === snakcell[0]) {
-  //     setFoodCell(randomFood(BoardSize));
-  //   }
-  // };
   useEffect(() => {
     document.addEventListener("keydown", (e) => {
       setDirection(getDirection(e.key));
     });
-    getFood(foodCell, snakeCell);
   }, [direction]);
 
   return (
     <div className="board">
-      {board.map((_, index) => {
-        const classname = getClassName(snakeCell, foodCell, index);
-        return <div key={index} className={classname}></div>;
+      {board.map((row, index) => {
+        return (
+          <div key={index} className="row">
+            {row.map((col, index) => {
+              return <div key={index} className="cell"></div>;
+            })}
+          </div>
+        );
       })}
     </div>
   );
