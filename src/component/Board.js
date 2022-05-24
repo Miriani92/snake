@@ -4,7 +4,7 @@ import { createBoard } from "../helpers/createBoard";
 import { randomFood } from "../helpers/randomFood";
 import { getDirection } from "../helpers/getSnakeDirection";
 import { useInterval } from "../helpers/interval";
-import { collision } from "../helpers/collision";
+import { useCollision } from "../helpers/collision";
 
 const BoardSize = 20;
 const Direction = {
@@ -20,6 +20,7 @@ const Board = () => {
   const [board, setBoard] = useState(createBoard(BoardSize));
   const [snakeBody, setSnakeBody] = useState([snkaeDefaultValue]);
   const [foodCell, setFoodCell] = useState(randomFood(BoardSize));
+  const isCollision = useCollision(board, snakeBody, direction);
 
   useEffect(() => {
     document.addEventListener("keydown", (e) => {
@@ -47,7 +48,7 @@ const Board = () => {
       setFoodCell(randomFood(BoardSize));
     }
 
-    if (collision(board, snakeBody, direction)) return gameover();
+    if (isCollision) return gameover();
     setSnakeBody([...snake]);
   };
 
