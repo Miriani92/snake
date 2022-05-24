@@ -4,6 +4,7 @@ import { createBoard } from "../helpers/createBoard";
 import { randomFood } from "../helpers/randomFood";
 import { getDirection } from "../helpers/getSnakeDirection";
 import { useInterval } from "../helpers/interval";
+import { collision } from "../helpers/collision";
 
 const BoardSize = 20;
 const Direction = {
@@ -29,19 +30,36 @@ const Board = () => {
   const moveSnake = () => {
     let snake = [...snakeBody];
     let head = snake[0];
-    console.log("render");
 
-    if (direction === "up") return head - BoardSize;
-    if (direction === "down") return head + BoardSize;
-    if (direction === "right") return head + 1;
-    if (direction === "left") return head - 1;
+    if (direction === "up") head -= BoardSize;
+    if (direction === "down") head += BoardSize;
+    if (direction === "right") head += 1;
+    if (direction === "left") head -= 1;
+    snake.unshift(head);
+    if (head !== foodCell) {
+      snake.pop();
+    } else {
+      let randomFoodind = randomFood(BoardSize);
+      console.log(snake.includes(randomFoodind));
+      while (snake.includes(randomFoodind)) {
+        randomFoodind = randomFood(BoardSize);
+      }
+      setFoodCell(randomFood(BoardSize));
+    }
 
-    return setSnakeBody([...snakeBody, head]);
+    if (collision(board, snakeBody, direction)) return gameover();
+    setSnakeBody([...snake]);
   };
+
+  function gameover() {
+    setFoodCell(randomFood(BoardSize));
+    setSnakeBody([snkaeDefaultValue]);
+    setDirection(Direction.right);
+  }
 
   useInterval(() => {
     moveSnake();
-  }, 500);
+  }, 100);
   return (
     <div className="board">
       {board.map((row, index) => {
