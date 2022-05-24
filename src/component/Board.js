@@ -4,7 +4,6 @@ import { createBoard } from "../helpers/createBoard";
 import { randomFood } from "../helpers/randomFood";
 import { getDirection } from "../helpers/getSnakeDirection";
 import { useInterval } from "../helpers/interval";
-import { moveSnake } from "../helpers/moveSnake";
 
 const BoardSize = 20;
 const Direction = {
@@ -13,12 +12,12 @@ const Direction = {
   up: "up",
   down: "down",
 };
-const snkaeDefaultValue = [0];
+const snkaeDefaultValue = 0;
 
 const Board = () => {
   const [direction, setDirection] = useState(Direction.right);
   const [board, setBoard] = useState(createBoard(BoardSize));
-  const [snakeCell, setSnakeCell] = useState(snkaeDefaultValue);
+  const [snakeBody, setSnakeBody] = useState([snkaeDefaultValue]);
   const [foodCell, setFoodCell] = useState(randomFood(BoardSize));
 
   useEffect(() => {
@@ -27,13 +26,30 @@ const Board = () => {
     });
   }, [direction]);
 
+  const moveSnake = () => {
+    let snake = [...snakeBody];
+    let head = snake[0];
+    console.log("render");
+
+    if (direction === "up") return head - BoardSize;
+    if (direction === "down") return head + BoardSize;
+    if (direction === "right") return head + 1;
+    if (direction === "left") return head - 1;
+
+    return setSnakeBody([...snakeBody, head]);
+  };
+
+  useInterval(() => {
+    moveSnake();
+  }, 500);
   return (
     <div className="board">
       {board.map((row, index) => {
         return (
           <div key={index} className="row">
-            {row.map((col, index) => {
-              return <div key={index} className="cell"></div>;
+            {row.map((cell) => {
+              const className = getClassName(snakeBody, foodCell, cell);
+              return <div key={cell} className={className}></div>;
             })}
           </div>
         );

@@ -1,5 +1,4 @@
 export const createBoard = (BoardSize) => {
-  console.log(BoardSize);
   const grid = [];
   let counter = 0;
   for (let i = 0; i < BoardSize; i++) {
